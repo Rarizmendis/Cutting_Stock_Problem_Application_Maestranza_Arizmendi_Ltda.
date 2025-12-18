@@ -176,9 +176,9 @@ def crear_pdf_cortes(patrones, nombre_estructura, largo_stock, kerf, metricas):
     
     pdf.set_xy(10, y_start + 6)
     pdf.set_font("Arial", 'B', 9)
-    pdf.cell(40, 5, "Desperdicio total:", 0, 0, 'R')
+    pdf.cell(40, 5, "Pérdida total:", 0, 0, 'R')
     pdf.set_font("Arial", '', 9)
-    pdf.cell(40, 5, f"{metricas['desperdicio_total_m']:.2f} m ({metricas['desperdicio_pct']:.1f}%)", 0, 0)
+    pdf.cell(40, 5, f"{metricas['Pérdida_total_m']:.2f} m ({metricas['Pérdida_pct']:.1f}%)", 0, 0)
     pdf.ln(15)
     
     pdf.set_font("Arial", 'B', 12)
@@ -283,7 +283,7 @@ def crear_pdf_cortes(patrones, nombre_estructura, largo_stock, kerf, metricas):
     pdf.set_x(x_centrado)
     pdf.cell(ancho_col1, 7, "Etiqueta", 1, 0, 'C', True)
     pdf.cell(ancho_col2, 7, "Largo (mm)", 1, 0, 'C', True)
-    pdf.cell(ancho_col3, 7, "Cantidad Total", 1, 1, 'C', True)
+    pdf.cell(ancho_col3, 7, "Cantidad total", 1, 1, 'C', True)
     
     pdf.set_font("Arial", '', 9)
     piezas_ordenadas = sorted(resumen_piezas.items(), key=lambda x: x[0][0])
@@ -367,16 +367,16 @@ if calcular:
             stock_total = total_barras * largo_stock
             util_total = sum(p['largo'] for b in resultados for p in b['cortes'])
             sobrante_total = sum(b['libre'] for b in resultados)
-            desperdicio_total = stock_total - util_total
+            Pérdida_total = stock_total - util_total
             
-            pct_desp = (desperdicio_total / stock_total) * 100
+            pct_desp = (Pérdida_total / stock_total) * 100
             pct_sobr = (sobrante_total / stock_total) * 100
 
             st.subheader("3. Resultados del Proyecto")
             
             k1, k2, k3 = st.columns(3)
             k1.metric("Total barras", f"{total_barras} un.")
-            k2.metric("Desperdicio total", f"{desperdicio_total/1000:.2f} m ({pct_desp:.1f}%)")
+            k2.metric("Pérdida total", f"{Pérdida_total/1000:.2f} m ({pct_desp:.1f}%)")
             k3.metric("Solo sobrante", f"{sobrante_total/1000:.2f} m ({pct_sobr:.1f}%)")
             
             st.divider()
@@ -385,8 +385,8 @@ if calcular:
             
             metricas = {
                 'total_barras': total_barras, 'sobrante_m': sobrante_total/1000,
-                'sobrante_pct': pct_sobr, 'desperdicio_total_m': desperdicio_total/1000,
-                'desperdicio_pct': pct_desp
+                'sobrante_pct': pct_sobr, 'Pérdida_total_m': Pérdida_total/1000,
+                'Pérdida_pct': pct_desp
             }
             
             # Crear PDF
