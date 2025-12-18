@@ -324,8 +324,7 @@ with st.sidebar:
 st.subheader("2. Listado de Piezas")
 if "df_piezas" not in st.session_state:
     st.session_state.df_piezas = pd.DataFrame(
-        [{"Cantidad": 1, "Largo": 4190, "Etiqueta": "C7"},
-            {"Cantidad": 6, "Largo": 265, "Etiqueta": "SP1"}],
+        [{"Cantidad": 1, "Largo": 1, "Etiqueta": "1"}],
     )
 
 edited_df = st.data_editor(
@@ -437,4 +436,3 @@ if calcular:
 
         else:
             st.info("Ingresa las piezas a la izquierda y presiona Calcular.")
-
