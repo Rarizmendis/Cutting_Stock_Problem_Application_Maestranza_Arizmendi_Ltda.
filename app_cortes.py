@@ -11,18 +11,15 @@ def check_password():
     """Retorna `True` si el usuario tiene la contraseña correcta."""
 
     def password_entered():
-        """Chequea si la contraseña ingresada coincide con la secreta."""
         if st.session_state["password"] == st.secrets["password"]:
             st.session_state["password_correct"] = True
-            del st.session_state["password"]  # Borrar contraseña de la memoria por seguridad
+            del st.session_state["password"]  
         else:
             st.session_state["password_correct"] = False
 
-    # Si ya validó, retornar True
     if st.session_state.get("password_correct", False):
         return True
 
-    # Mostrar inputs de contraseña
     st.set_page_config(page_title="Acceso Privado", layout="centered")
     st.title("🔒 Acceso Restringido")
     st.markdown("Esta aplicación es propiedad de **Maestranza Arizmendi Ltda.**")
@@ -38,13 +35,8 @@ def check_password():
 
     return False
 
-# Si la contraseña NO es correcta, el script se detiene aquí.
 if not check_password():
     st.stop()
-
-# =============================================================================
-# A PARTIR DE AQUÍ CARGA EL PROGRAMA SOLO SI LA CONTRASEÑA ES CORRECTA
-# =============================================================================
 
 # -----------------------------------------------------------------------------
 # 1. LÓGICA DEL NEGOCIO (ALGORITMO)
@@ -301,11 +293,6 @@ def crear_pdf_cortes(patrones, nombre_estructura, largo_stock, kerf, metricas):
 # 3. INTERFAZ GRÁFICA
 # -----------------------------------------------------------------------------
 
-# st.set_page_config se mueve adentro de check_password o se omite si se llama antes
-# Como check_password llama a set_page_config, no lo ponemos aquí arriba duplicado.
-# Sin embargo, check_password configura 'centered', y la app principal es 'wide'.
-# Haremos un truco: check_password solo renderiza inputs.
-
 if st.session_state.get("password_correct", False):
     st.set_page_config(page_title="Optimizador Arizmendi", layout="wide")
 
@@ -399,7 +386,8 @@ if calcular:
             pdf_data = pdf_obj.output() 
             b64_pdf = base64.b64encode(pdf_data).decode('utf-8')
 
-            pdf_display = f'<iframe src="data:application/pdf;base64,{b64_pdf}" width="100%" height="800" type="application/pdf"></iframe>'
+            # CAMBIO CLAVE: Usamos <embed> en lugar de <iframe> para evitar bloqueo de Chrome/Brave
+            pdf_display = f'<embed src="data:application/pdf;base64,{b64_pdf}" width="100%" height="800" type="application/pdf">'
             st.markdown(pdf_display, unsafe_allow_html=True)
             
             st.divider()
