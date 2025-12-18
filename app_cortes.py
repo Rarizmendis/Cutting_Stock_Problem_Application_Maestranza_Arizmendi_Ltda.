@@ -435,5 +435,6 @@ if calcular:
                 
                 idx_patron += 1
 
-    else:
-        st.info("Ingresa las piezas a la izquierda y presiona Calcular.")
+        else:
+            st.info("Ingresa las piezas a la izquierda y presiona Calcular.")
+
