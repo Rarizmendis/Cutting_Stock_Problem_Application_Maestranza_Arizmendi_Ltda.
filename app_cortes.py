@@ -2,7 +2,8 @@ import streamlit as st
 import pandas as pd
 from fpdf import FPDF
 from datetime import datetime
-from streamlit_pdf_viewer import pdf_viewer # NUEVA LIBRERÍA
+from streamlit_pdf_viewer import pdf_viewer
+import pytz # NUEVA LIBRERÍA PARA ZONA HORARIA
 
 # -----------------------------------------------------------------------------
 # 0. SISTEMA DE SEGURIDAD (LOGIN)
@@ -130,7 +131,13 @@ class PDFReporte(FPDF):
         self.set_font('Arial', 'I', 8)
         self.cell(0, 10, f'Página {self.page_no()}', 0, 0, 'C')
         self.set_x(-50)
-        ahora = datetime.now().strftime("%d/%m/%y %H:%M")
+        
+        # --- CORRECCIÓN DE HORA ---
+        # Definimos la zona horaria de Chile
+        chile_tz = pytz.timezone('America/Santiago')
+        # Obtenemos la hora actual en esa zona
+        ahora = datetime.now(chile_tz).strftime("%d/%m/%y %H:%M")
+        
         self.cell(40, 10, ahora, 0, 0, 'R')
 
 def crear_pdf_cortes(patrones, nombre_estructura, largo_stock, kerf, metricas):
@@ -386,7 +393,15 @@ if calcular:
             pdf_obj = crear_pdf_cortes(patrones, nombre_estructura, largo_stock, kerf, metricas)
             pdf_data = pdf_obj.output() 
             
-            # --- SOLUCIÓN PARA PREVIEW: USAR LIBRERÍA NATIVA ---
+            # --- NUEVO BOTÓN DE DESCARGA ---
+            st.download_button(
+                label="⬇️ Descargar Reporte PDF",
+                data=bytes(pdf_data),
+                file_name=f"Cortes_{nombre_estructura}.pdf",
+                mime="application/pdf",
+            )
+            
+            # VISUALIZADOR SEGURO
             pdf_viewer(input=bytes(pdf_data), width=700)
             
             st.divider()
@@ -420,5 +435,5 @@ if calcular:
                 
                 idx_patron += 1
 
-        else:
-            st.info("Ingresa las piezas a la izquierda y presiona Calcular.")
+    else:
+        st.info("Ingresa las piezas a la izquierda y presiona Calcular.")
