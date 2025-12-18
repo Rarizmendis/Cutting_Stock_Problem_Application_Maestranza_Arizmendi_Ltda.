@@ -1,8 +1,8 @@
 import streamlit as st
 import pandas as pd
 from fpdf import FPDF
-import base64
 from datetime import datetime
+from streamlit_pdf_viewer import pdf_viewer # NUEVA LIBRERÍA
 
 # -----------------------------------------------------------------------------
 # 0. SISTEMA DE SEGURIDAD (LOGIN)
@@ -382,13 +382,12 @@ if calcular:
                 'desperdicio_pct': pct_desp
             }
             
+            # Crear PDF
             pdf_obj = crear_pdf_cortes(patrones, nombre_estructura, largo_stock, kerf, metricas)
             pdf_data = pdf_obj.output() 
-            b64_pdf = base64.b64encode(pdf_data).decode('utf-8')
-
-            # CAMBIO CLAVE: Usamos <embed> en lugar de <iframe> para evitar bloqueo de Chrome/Brave
-            pdf_display = f'<embed src="data:application/pdf;base64,{b64_pdf}" width="100%" height="800" type="application/pdf">'
-            st.markdown(pdf_display, unsafe_allow_html=True)
+            
+            # --- SOLUCIÓN PARA PREVIEW: USAR LIBRERÍA NATIVA ---
+            pdf_viewer(input=bytes(pdf_data), width=700)
             
             st.divider()
             
