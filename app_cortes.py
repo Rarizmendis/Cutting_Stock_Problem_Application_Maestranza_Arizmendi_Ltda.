@@ -315,7 +315,7 @@ st.title("🏭 Optimizador de Cortes - Maestranza Arizmendi Ltda.")
 
 with st.sidebar:
     st.header("1. Configuración")
-    nombre_estructura = st.text_input("Nombre Proyecto", value="Galpón Principal")
+    nombre_estructura = st.text_input("Nombre Proyecto", value="Estructura X")
     largo_stock = st.number_input("Largo Comercial (mm)", value=6000, step=100)
     kerf = st.number_input("Espesor Sierra (mm)", value=3.0, step=0.5)
     st.divider()
@@ -436,3 +436,5 @@ if calcular:
 
         else:
             st.info("Ingresa las piezas a la izquierda y presiona Calcular.")
+
+
